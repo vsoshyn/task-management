@@ -1,3 +1,4 @@
 rootProject.name = 'task-management'
 include 'boot'
+include 'migration'
 
