@@ -1,0 +1,127 @@
+package model;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonView;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.security.core.userdetails.UserDetails;
+import view.Views;
+
+import javax.persistence.*;
+import java.util.*;
+
+@Entity
+@Table(name = "[USER]")
+@org.hibernate.annotations.DynamicUpdate
+
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+
+@NoArgsConstructor
+@Getter @Setter
+@ToString(doNotUseGetters = true, of = {"id", "username", "state"})
+public class User extends Persistable implements UserDetails {
+    public static final User SYSTEM = new User("system", null, null, null, false, null, Arrays.asList(Authority.SYSTEM));
+
+    @Id
+    @GeneratedValue(generator = "idGenerator", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "idGenerator", allocationSize = 10)
+    private Long id;
+    @JsonView(Views.UserView.Name.class)
+    @Column(unique = true)
+    private String username;
+    @JsonView(Views.UserView.UI.class)
+    @Column
+    private String firstName;
+    @JsonView(Views.UserView.UI.class)
+    @Column
+    private String lastName;
+    @JsonIgnore
+    @Column
+    private String email;
+    @Column
+    @org.hibernate.annotations.Type(type = "yes_no")
+    private boolean photo;
+    @JsonIgnore
+    @Column
+    private String password;
+    @JsonView(Views.UserView.UI.class)
+    @Column
+    @Enumerated(EnumType.STRING)
+    private UserState state;
+    @JsonView(Views.UserView.UI.class)
+    @Column
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    private Collection<Authority> authorities = new HashSet<>();
+    @JsonView(Views.AuditView.AuditDate.CreatedDate.class)
+    @Temporal(TemporalType.DATE)
+    @CreatedDate
+    private Date createdDate = new Date();
+    @JsonView(Views.AuditView.AuditDate.LastModifiedDate.class)
+    @Temporal(TemporalType.DATE)
+    @LastModifiedDate
+    private Date lastModifiedDate = new Date();
+
+    public User(String username, String firstName, String lastName, String email, boolean hasPhoto, String password, List<Authority> authorities) {
+        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.photo = hasPhoto;
+        this.authorities.addAll(authorities);
+        this.state = UserState.DRAFT;
+        this.password = password;
+    }
+
+    @Override
+    public Collection<Authority> getAuthorities() {
+        return authorities;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isAccountNonLocked() {
+        return state == UserState.ACTIVE;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isEnabled() {
+        return state == UserState.ACTIVE;
+    }
+
+    public void patch(User user) {
+        firstName = user.firstName;
+        lastName = user.lastName;
+        email = user.email;
+        password = user.password;
+    }
+
+}
