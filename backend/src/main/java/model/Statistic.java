@@ -6,10 +6,11 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.util.Date;
 
 @Entity
-@Table(name = "[STATISTIC]")
+@Table
 
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 
@@ -21,12 +22,12 @@ public class Statistic {
     @SequenceGenerator(name = "idGenerator", allocationSize = 10)
     private long id;
     @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "statistic_task_fk"))
     private Task task;
     @Column
     private int cost;
-    @Column(name = "[DATE]")
-    @Temporal(TemporalType.DATE)
-    private Date date;
+    @Column
+    private Instant date;
     @Column
     private String action;
 }

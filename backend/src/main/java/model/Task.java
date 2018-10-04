@@ -6,6 +6,7 @@ import org.hibernate.annotations.Type;
 import view.Views;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.JOINED)
 
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = Maintenance.class, name = "maintenance"),
         @JsonSubTypes.Type(value = Payment.class, name = "payment"),
@@ -34,8 +35,7 @@ public class Task extends Auditable {
     @Column
     private String schedule;
     @Column
-    @Temporal(TemporalType.DATE)
-    private Date dueDate;
+    private LocalDate dueDate;
     @Column
     @Type(type = "yes_no")
     private boolean shared;
@@ -50,6 +50,7 @@ public class Task extends Auditable {
     @Column
     private String description;
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(foreignKey = @ForeignKey(name = "parent_task_fk"))
     private Task parent;
     @Column
     @Lob

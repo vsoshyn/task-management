@@ -6,10 +6,10 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.Instant;
 
 @Entity
-@Table(name = "[AUDIT]")
+@Table
 
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 
@@ -21,6 +21,7 @@ public class Audit {
     @SequenceGenerator(name = "idGenerator", allocationSize = 10)
     private long id;
     @ManyToOne
+    @JoinColumn(foreignKey=@ForeignKey(name="audit_user_fk"))
     private User user;
     @Column
     private String target;
@@ -30,7 +31,6 @@ public class Audit {
     private String oldValue;
     @Column
     private String newValue;
-    @Column(name = "[DATE]")
-    @Temporal(TemporalType.DATE)
-    private Date date;
+    @Column
+    private Instant date;
 }

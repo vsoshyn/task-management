@@ -27,7 +27,6 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = "home.maintenance.dao.common")
 @EnableJpaAuditing(auditorAwareRef = "createdByAware")
 public class PersistenceConfig {
 
@@ -62,6 +61,8 @@ public class PersistenceConfig {
         bean.getJpaPropertyMap().put("hibernate.hbm2ddl.auto", "create-drop");
         bean.getJpaPropertyMap().put("hibernate.dialect", "org.hibernate.dialect.PostgreSQL95Dialect");
         bean.getJpaPropertyMap().put("hibernate.jdbc.lob.non_contextual_creation", "true");
+        bean.getJpaPropertyMap().put("hibernate.physical_naming_strategy", "org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy");
+        bean.getJpaPropertyMap().put("hibernate.implicit_naming_strategy", "org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy");
 
         bean.afterPropertiesSet();
         return bean.getObject();
@@ -72,7 +73,6 @@ public class PersistenceConfig {
     public DataSource dataSourcePostgres() {
         PGSimpleDataSource dataSource = new PGSimpleDataSource();
         dataSource.setURL(environment.getProperty("application.postgres.jdbc.url"));
-//        dataSource.setCurrentSchema(environment.getProperty("application.postgres.jdbc.schema"));
         dataSource.setUser(environment.getProperty("application.postgres.jdbc.user"));
         dataSource.setPassword(environment.getProperty("application.postgres.jdbc.password"));
         return dataSource;

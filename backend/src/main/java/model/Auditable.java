@@ -14,7 +14,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import view.Views;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.Instant;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
@@ -25,22 +25,22 @@ import java.util.Date;
 @Getter @Setter
 abstract class Auditable extends Persistable {
     @JsonView(Views.AuditView.AuditDate.CreatedDate.class)
-    @Temporal(TemporalType.DATE)
     @CreatedDate
-    private Date createdDate = new Date();
+    private Instant createdDate = Instant.now();
 
     @JsonView(Views.AuditView.AuditDate.LastModifiedDate.class)
-    @Temporal(TemporalType.DATE)
     @LastModifiedDate
-    private Date lastModifiedDate = new Date();
+    private Instant lastModifiedDate = Instant.now();
 
     @JsonView(Views.AuditView.AuditUser.CreatedBy.class)
     @CreatedBy
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(foreignKey = @ForeignKey(name = "created_user_fk"))
     private User createdBy;
 
     @JsonView(Views.AuditView.AuditUser.LastModifiedBy.class)
     @LastModifiedBy
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(foreignKey = @ForeignKey(name = "modified_user_fk"))
     private User lastModifiedBy;
 }

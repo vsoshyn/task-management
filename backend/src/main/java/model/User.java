@@ -13,10 +13,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import view.Views;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.*;
 
 @Entity
-@Table(name = "[USER]")
+@Table(name = "[user]", uniqueConstraints = @UniqueConstraint(name = "username_uk", columnNames = "username"))
 @org.hibernate.annotations.DynamicUpdate
 
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -25,14 +26,14 @@ import java.util.*;
 @Getter @Setter
 @ToString(doNotUseGetters = true, of = {"id", "username", "state"})
 public class User extends Persistable implements UserDetails {
-    public static final User SYSTEM = new User("system", null, null, null, false, null, Arrays.asList(Authority.SYSTEM));
+    public static final User SYSTEM = new User("system", null, null, null, false, null, List.of(Authority.SYSTEM));
 
     @Id
     @GeneratedValue(generator = "idGenerator", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "idGenerator", allocationSize = 10)
     private Long id;
     @JsonView(Views.UserView.Name.class)
-    @Column(unique = true)
+    @Column
     private String username;
     @JsonView(Views.UserView.UI.class)
     @Column
@@ -55,17 +56,16 @@ public class User extends Persistable implements UserDetails {
     private UserState state;
     @JsonView(Views.UserView.UI.class)
     @Column
+    @JoinTable(name = "user_authorities", foreignKey = @ForeignKey(name = "user_authorities_fk"))
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     private Collection<Authority> authorities = new HashSet<>();
     @JsonView(Views.AuditView.AuditDate.CreatedDate.class)
-    @Temporal(TemporalType.DATE)
     @CreatedDate
-    private Date createdDate = new Date();
+    private LocalDate createdDate = LocalDate.now();
     @JsonView(Views.AuditView.AuditDate.LastModifiedDate.class)
-    @Temporal(TemporalType.DATE)
     @LastModifiedDate
-    private Date lastModifiedDate = new Date();
+    private LocalDate lastModifiedDate = LocalDate.now();
 
     public User(String username, String firstName, String lastName, String email, boolean hasPhoto, String password, List<Authority> authorities) {
         this.username = username;
@@ -115,13 +115,6 @@ public class User extends Persistable implements UserDetails {
     @Override
     public boolean isEnabled() {
         return state == UserState.ACTIVE;
-    }
-
-    public void patch(User user) {
-        firstName = user.firstName;
-        lastName = user.lastName;
-        email = user.email;
-        password = user.password;
     }
 
 }

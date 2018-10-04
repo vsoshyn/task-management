@@ -4,7 +4,7 @@ plugins {
 }
 
 project.ext {
-    adminUrl = 'jdbc:postgresql://docker:5432/postgres'
+    adminUrl = 'jdbc:postgresql://localhost:5432/postgres'
     adminUsername = 'vsoshyn'
     adminPassword = '12345678'
 }

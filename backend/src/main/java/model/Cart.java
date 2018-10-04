@@ -24,8 +24,13 @@ public class Cart extends Persistable {
     private Long id;
     @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(foreignKey=@ForeignKey(name="cart_user_fk"))
     private User owner;
     @ManyToMany
-    @JoinTable
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "cart"),
+            inverseJoinColumns = @JoinColumn(name = "task"),
+            foreignKey = @ForeignKey(name = "cart_fk"),
+            inverseForeignKey = @ForeignKey(name = "task_fk"))
     private List<Task> tasks = new ArrayList<>();
 }

@@ -9,7 +9,7 @@ import javax.persistence.*;
 
 @Entity
 @Table
-@PrimaryKeyJoinColumn(name = "task")
+@PrimaryKeyJoinColumn(name = "task", foreignKey = @ForeignKey(name = "maintenance_task_fk"))
 
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 
