@@ -18,12 +18,12 @@ dependencies {
 liquibase {
     activities {
         main {
-            changeLogFile {
-                'src/main/sql/changeLog.yml'
-            }
+            changeLogFile 'src/main/sql/changelog.yml'
             url project.ext.adminUrl
             username project.ext.adminUsername
             password project.ext.adminPassword
+            databaseChangeLogTableName 'changelog'
+            databaseChangeLogLockTableName 'changelog_lock'
         }
     }
 }

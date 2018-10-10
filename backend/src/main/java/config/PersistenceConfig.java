@@ -28,6 +28,7 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaAuditing(auditorAwareRef = "createdByAware")
+@EnableJpaRepositories(basePackages = "repository")
 public class PersistenceConfig {
 
     @Autowired
@@ -58,7 +59,7 @@ public class PersistenceConfig {
     @Profile("postgres")
     public EntityManagerFactory entityManagerFactoryPostgres(@Autowired DataSource dataSource) {
         LocalContainerEntityManagerFactoryBean bean = createCommonEMFBean(dataSource);
-        bean.getJpaPropertyMap().put("hibernate.hbm2ddl.auto", "create-drop");
+        bean.getJpaPropertyMap().put("hibernate.hbm2ddl.auto", "validate");
         bean.getJpaPropertyMap().put("hibernate.dialect", "org.hibernate.dialect.PostgreSQL95Dialect");
         bean.getJpaPropertyMap().put("hibernate.jdbc.lob.non_contextual_creation", "true");
         bean.getJpaPropertyMap().put("hibernate.physical_naming_strategy", "org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy");
