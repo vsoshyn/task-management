@@ -15,8 +15,6 @@ dependencies {
     liquibaseRuntime 'org.postgresql:postgresql:42.2.2'
 }
 
-test.dependsOn update
-
 liquibase {
     activities {
         main {
