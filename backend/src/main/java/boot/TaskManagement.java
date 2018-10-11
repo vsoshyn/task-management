@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Import;
 
 @Import(ApplicationConfig.class)
 @SpringBootApplication
-class TaskManagement {
+public class TaskManagement {
     public static void main(String[] args) {
         SpringApplication.run(TaskManagement.class);
     }

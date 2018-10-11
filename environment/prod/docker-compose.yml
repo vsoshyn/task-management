@@ -1,0 +1,11 @@
+version: "3.3"
+services:
+  postgres:
+    image: postgres:10.5
+    environment:
+      POSTGRES_USER: 'task-manager'
+      POSTGRES_PASSWORD: '12345678'
+    ports:
+    - 5432:5433
+  task-manager:
+    image: vsoshyn/task-manager
