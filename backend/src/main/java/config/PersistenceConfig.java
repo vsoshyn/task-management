@@ -2,7 +2,6 @@ package config;
 
 import model.CreatedByAware;
 import model.User;
-import org.h2.Driver;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.postgresql.ds.PGSimpleDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import org.springframework.dao.annotation.PersistenceExceptionTranslationPostPro
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.support.SharedEntityManagerBean;
@@ -33,27 +31,6 @@ public class PersistenceConfig {
 
     @Autowired
     private Environment environment;
-
-    @Bean("entityManagerFactory")
-    @Profile("h2")
-    public EntityManagerFactory entityManagerFactoryH2(@Autowired DataSource dataSource) {
-        LocalContainerEntityManagerFactoryBean bean = createCommonEMFBean(dataSource);
-        bean.getJpaPropertyMap().put("hibernate.hbm2ddl.auto", "create-drop");
-        bean.getJpaPropertyMap().put("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
-
-        bean.afterPropertiesSet();
-        return bean.getObject();
-    }
-
-    @Bean
-    @Profile("h2")
-    public DataSource dataSourceH2() {
-        SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
-        dataSource.setDriver(new Driver());
-        dataSource.setUrl(environment.getProperty("application.h2.jdbc.url"));
-        dataSource.setUsername(environment.getProperty("application.h2.jdbc.user"));
-        return dataSource;
-    }
 
     @Bean("entityManagerFactory")
     @Profile("postgres")
