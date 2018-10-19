@@ -5,7 +5,13 @@ services:
     environment:
       POSTGRES_USER: 'task-manager'
       POSTGRES_PASSWORD: '12345678'
-    ports:
-    - 5432:5433
+    volumes:
+      - task-management-postgres:/var/lib/postgresql/data
   task-manager:
-    image: vsoshyn/task-manager
+    image: task-management
+    depends_on:
+      - postgres
+    links:
+      - postgres:docker
+volumes:
+  task-management-postgres:

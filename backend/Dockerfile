@@ -5,3 +5,8 @@ WORKDIR /home
 ADD build/distributions/backend-boot.tar task-management/
 
 CMD sh task-management/backend-boot/bin/backend
+
+# gradlew bootDistTar
+# docker build -t task-management .
+# docker run --rm -it task-management
+# sh gradlew snapshot -PrunList=test

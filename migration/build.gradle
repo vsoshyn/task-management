@@ -4,10 +4,17 @@ plugins {
 }
 
 project.ext {
-    adminUrl = 'jdbc:postgresql://docker:5432/postgres'
-    adminUsername = 'vsoshyn'
-    adminPassword = '12345678'
+    testAdminUrl = 'jdbc:postgresql://docker:5432/postgres'
+    testAdminUsername = 'vsoshyn'
+    testAdminPassword = '12345678'
+
+    prodAdminUrl = 'jdbc:postgresql://docker:5433/postgres'
+    prodAdminUsername = 'task-manager'
+    prodAdminPassword = '12345678'
+    
+    runList = 'test'
 }
+
 
 dependencies {
     liquibaseRuntime 'org.liquibase:liquibase-core:3.6.1'
@@ -17,13 +24,24 @@ dependencies {
 
 liquibase {
     activities {
-        main {
+        test {
             changeLogFile 'src/main/sql/changelog.yml'
-            url project.ext.adminUrl
-            username project.ext.adminUsername
-            password project.ext.adminPassword
+            url project.ext.testAdminUrl
+            username project.ext.testAdminUsername
+            password project.ext.testAdminPassword
+            databaseChangeLogTableName 'changelog'
+            databaseChangeLogLockTableName 'changelog_lock'
+        }
+        
+        prod {
+            changeLogFile 'src/main/sql/changelog.yml'
+            url project.ext.prodAdminUrl
+            username project.ext.prodAdminUsername
+            password project.ext.prodAdminPassword
             databaseChangeLogTableName 'changelog'
             databaseChangeLogLockTableName 'changelog_lock'
         }
     }
+    
+    runList = project.ext.runList
 }
