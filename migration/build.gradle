@@ -15,33 +15,44 @@ project.ext {
     runList = 'test'
 }
 
+task docker_images(type: Exec) {
+    executable "sh"
+    args "-c", "docker run --rm -p 5433:5432 -v prod_task-management-postgres:/var/lib/postgresql/data --name task-manager-db-temp -d postgres:10.5"
+} << {
+
+    liquibase {
+        activities {
+            test {
+                changeLogFile 'src/main/sql/changelog.yml'
+                url project.ext.testAdminUrl
+                username project.ext.testAdminUsername
+                password project.ext.testAdminPassword
+                databaseChangeLogTableName 'changelog'
+                databaseChangeLogLockTableName 'changelog_lock'
+            }
+
+            prod {
+                changeLogFile 'src/main/sql/changelog.yml'
+                url project.ext.prodAdminUrl
+                username project.ext.prodAdminUsername
+                password project.ext.prodAdminPassword
+                databaseChangeLogTableName 'changelog'
+                databaseChangeLogLockTableName 'changelog_lock'
+            }
+        }
+
+        runList = project.ext.runList
+    }
+    
+    exec {
+        executable "sh"
+        args "-c", "docker stop task-manager-db-temp"
+    }
+    
+}
 
 dependencies {
     liquibaseRuntime 'org.liquibase:liquibase-core:3.6.1'
     liquibaseRuntime 'org.liquibase:liquibase-groovy-dsl:2.0.1'
     liquibaseRuntime 'org.postgresql:postgresql:42.2.2'
-}
-
-liquibase {
-    activities {
-        test {
-            changeLogFile 'src/main/sql/changelog.yml'
-            url project.ext.testAdminUrl
-            username project.ext.testAdminUsername
-            password project.ext.testAdminPassword
-            databaseChangeLogTableName 'changelog'
-            databaseChangeLogLockTableName 'changelog_lock'
-        }
-        
-        prod {
-            changeLogFile 'src/main/sql/changelog.yml'
-            url project.ext.prodAdminUrl
-            username project.ext.prodAdminUsername
-            password project.ext.prodAdminPassword
-            databaseChangeLogTableName 'changelog'
-            databaseChangeLogLockTableName 'changelog_lock'
-        }
-    }
-    
-    runList = project.ext.runList
 }
