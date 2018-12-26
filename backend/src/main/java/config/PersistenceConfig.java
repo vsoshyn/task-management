@@ -33,7 +33,6 @@ public class PersistenceConfig {
     private Environment environment;
 
     @Bean("entityManagerFactory")
-    @Profile("postgres")
     public EntityManagerFactory entityManagerFactoryPostgres(@Autowired DataSource dataSource) {
         LocalContainerEntityManagerFactoryBean bean = createCommonEMFBean(dataSource);
         bean.getJpaPropertyMap().put("hibernate.hbm2ddl.auto", "validate");
@@ -47,12 +46,22 @@ public class PersistenceConfig {
     }
 
     @Bean
-    @Profile("postgres")
-    public DataSource dataSourcePostgres() {
+    @Profile("test")
+    public DataSource dataSourcePostgresTest() {
         PGSimpleDataSource dataSource = new PGSimpleDataSource();
-        dataSource.setURL(environment.getProperty("application.postgres.jdbc.url"));
-        dataSource.setUser(environment.getProperty("application.postgres.jdbc.user"));
-        dataSource.setPassword(environment.getProperty("application.postgres.jdbc.password"));
+        dataSource.setURL(environment.getProperty("application.test.postgres.jdbc.url"));
+        dataSource.setUser(environment.getProperty("application.test.postgres.jdbc.user"));
+        dataSource.setPassword(environment.getProperty("application.test.postgres.jdbc.password"));
+        return dataSource;
+    }
+
+    @Bean
+    @Profile("prod")
+    public DataSource dataSourcePostgresProd() {
+        PGSimpleDataSource dataSource = new PGSimpleDataSource();
+        dataSource.setURL(environment.getProperty("application.prod.postgres.jdbc.url"));
+        dataSource.setUser(environment.getProperty("application.prod.postgres.jdbc.user"));
+        dataSource.setPassword(environment.getProperty("application.prod.postgres.jdbc.password"));
         return dataSource;
     }
 

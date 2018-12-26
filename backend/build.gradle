@@ -13,6 +13,12 @@ repositories {
     mavenCentral()
 }
 
+bootRun {
+    systemProperties = [
+            'spring.profiles.active': project.hasProperty('prod') ? 'prod' : 'test' 
+    ]
+}
+
 test {
     useJUnitPlatform()
     dependsOn ':migration:update'

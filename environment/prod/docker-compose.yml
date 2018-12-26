@@ -7,11 +7,11 @@ services:
       POSTGRES_PASSWORD: '12345678'
     volumes:
       - task-management-postgres:/var/lib/postgresql/data
+    ports:
+      - 5433:5432
   task-manager:
     image: task-management
     depends_on:
       - postgres
-    links:
-      - postgres:docker
 volumes:
   task-management-postgres:
