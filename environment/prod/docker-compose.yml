@@ -10,7 +10,8 @@ services:
     ports:
       - 5433:5432
   task-manager:
-    image: task-management
+    build: ../../backend
+#    command: sh -c './wait-for.sh postgres:5432 -t 5'
     depends_on:
       - postgres
 volumes:
