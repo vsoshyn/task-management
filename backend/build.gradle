@@ -19,6 +19,15 @@ bootRun {
     ]
 }
 
+processResources {
+    from("../migration")
+}
+
+task copyDependencies(type: Copy) {
+    from configurations.compile
+    into 'dependencies'
+}
+
 test {
     useJUnitPlatform()
     dependsOn ':migration:update'
