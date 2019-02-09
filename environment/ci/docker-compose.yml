@@ -1,9 +1,9 @@
-version: "3.3"
+version: '3.3'
 services:
   teamcity-server:
     image: jetbrains/teamcity-server:2018.1.1
     ports:
-    - '8111:8111'
+      - '8111:8111'
   teamcity-agent:
     build:
       context: ./teamcity-agent
@@ -13,11 +13,11 @@ services:
       DOCKER_IN_DOCKER: 'start'
     privileged: true
     volumes:
-    - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock
   youtrack:
     image: jetbrains/youtrack:2018.2.44329
     ports:
-    - '8080:8080'
+      - '8080:8080'
   postgres:
     build:
       context: ./postgres
@@ -26,11 +26,15 @@ services:
       POSTGRES_USER: 'vsoshyn'
       POSTGRES_PASSWORD: '12345678'
     ports:
-    - 5432:5432
+      - 5432:5432
   portainer:
     image: portainer/portainer
     ports:
-    - "9000:9000"
+      - '9000:9000'
     command: -H unix:///var/run/docker.sock
     volumes:
-    - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock
+  registry:
+    image: registry:2.6
+    ports:
+      - '5000:5000'
