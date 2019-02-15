@@ -1,5 +1,5 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 /home/wait-for.sh postgres:5431 -t 5
 # add here failing if not reachable
-/home/task-management/backend-boot/bin/backend
+sh "/home/task-management/$( ls /home/task-management )/bin/backend"

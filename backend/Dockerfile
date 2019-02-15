@@ -5,7 +5,7 @@ WORKDIR /home
 RUN apt-get update && \
     apt-get -y install netcat
 
-ADD build/distributions/backend-boot.tar task-management/
+ADD build/distributions/backend-boot-*.tar task-management/
 ADD wait-for.sh .
 ADD start.sh .
 

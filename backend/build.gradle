@@ -19,14 +19,14 @@ bootRun {
     ]
 }
 
-processResources {
-    from("../migration")
-}
-
-task copyDependencies(type: Copy) {
-    from configurations.compile
-    into 'dependencies'
-}
+//processResources {
+//    from("../migration")
+//}
+//
+//task copyDependencies(type: Copy) {
+//    from configurations.compile
+//    into 'dependencies'
+//}
 
 test {
     useJUnitPlatform()

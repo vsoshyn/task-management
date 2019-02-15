@@ -2,4 +2,6 @@ allprojects {
     repositories {
         mavenCentral()
     }
+
+    version = "${version}"
 }
