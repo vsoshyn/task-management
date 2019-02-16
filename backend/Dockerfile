@@ -11,7 +11,9 @@ ADD start.sh .
 
 ENV JAVA_OPTS="-Dspring.profiles.active=prod"
 
-ENTRYPOINT exec sh -c '/home/start.sh'
+EXPOSE 3002
+
+ENTRYPOINT ["sh", "/home/start.sh"]
 
 # docker-compose up -d postgres
 # sh gradlew update -PrunList=test
