@@ -30,7 +30,7 @@ echo "Next develop version: $NEXT_DEVELOP_VERSION"
 sed -i "s/version=.*/version=$CURRENT_VERSION/" gradle.properties
 git add gradle.properties
 git commit -m "[Release version: $CURRENT_VERSION]"
-git tag -a -m "[Release tag: $CURRENT_VERSION]"
+git tag -a -m "[Release tag: $CURRENT_VERSION]" ${CURRENT_VERSION}
 
 sed -i "s/version=.*/version=${NEXT_DEVELOP_VERSION}/" gradle.properties
 git add gradle.properties
