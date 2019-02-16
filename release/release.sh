@@ -39,6 +39,6 @@ git commit -m "[Next develop version: $NEXT_DEVELOP_VERSION]"
 git push --tags
 
 git checkout master
-git merge ${CURRENT_VERSION}
+git merge --ff-only ${CURRENT_VERSION}
 git push
 git checkout develop
