@@ -27,10 +27,18 @@ NEXT_DEVELOP_VERSION="$NEXT_DEVELOP_VERSION-SNAPSHOT"
 echo "Release version: $CURRENT_VERSION"
 echo "Next develop version: $NEXT_DEVELOP_VERSION"
 
+git reset --hard HEAD
+git checkout develop
+git pull
+
 sed -i "s/version=.*/version=$CURRENT_VERSION/" gradle.properties
-git add gradle.properties
+sed -i "s/TASK_MANAGER_VERSION=.*/version=$CURRENT_VERSION/" environment/prod/.env
+git add gradle.properties .env
 git commit -m "[Release version: $CURRENT_VERSION]"
 git tag -a -m "[Release tag: $CURRENT_VERSION]" ${CURRENT_VERSION}
+
+sh gradlew clean bootDistTar -x test
+docker build -t task-manager:${CURRENT_VERSION} backend
 
 sed -i "s/version=.*/version=${NEXT_DEVELOP_VERSION}/" gradle.properties
 git add gradle.properties
@@ -39,6 +47,6 @@ git commit -m "[Next develop version: $NEXT_DEVELOP_VERSION]"
 git push --tags
 
 git checkout master
+git pull
 git merge --ff-only ${CURRENT_VERSION}
 git push
-git checkout develop
