@@ -2,6 +2,11 @@
 
 cd ..
 
+git reset -q --hard HEAD
+git checkout -q develop
+git pull -q
+echo "Checked out: develop"
+
 sed -i 's/-SNAPSHOT//' gradle.properties
 
 getProperty() {
@@ -27,26 +32,33 @@ NEXT_DEVELOP_VERSION="$NEXT_DEVELOP_VERSION-SNAPSHOT"
 echo "Release version: $CURRENT_VERSION"
 echo "Next develop version: $NEXT_DEVELOP_VERSION"
 
-git reset --hard HEAD
-git checkout develop
-git pull
-
 sed -i "s/version=.*/version=$CURRENT_VERSION/" gradle.properties
 sed -i "s/TASK_MANAGER_VERSION=.*/version=$CURRENT_VERSION/" environment/prod/.env
 git add gradle.properties environment/prod/.env
-git commit -m "[Release version: $CURRENT_VERSION]"
-git tag -a -m "[Release tag: $CURRENT_VERSION]" ${CURRENT_VERSION}
+git commit -q -m "[Release version: $CURRENT_VERSION]"
+git tag -a "[Release tag: $CURRENT_VERSION]" ${CURRENT_VERSION}
+echo "Committed release version and tag: develop"
 
-sh gradlew clean bootDistTar -x test
-docker build -t task-manager:${CURRENT_VERSION} backend
+sh gradlew -q clean bootDistTar -x test
+echo "Built release artifacts: develop"
+
+docker build -q -t task-manager:${CURRENT_VERSION} backend
+echo "Built docker image: task-manager:$CURRENT_VERSION"
 
 sed -i "s/version=.*/version=${NEXT_DEVELOP_VERSION}/" gradle.properties
 git add gradle.properties
-git commit -m "[Next develop version: $NEXT_DEVELOP_VERSION]"
+git commit -q -m "[Next develop version: $NEXT_DEVELOP_VERSION]"
+echo "Committed next develop version: develop"
 
 git push --tags
+echo "Published to git: develop"
 
-git checkout master
-git pull
-git merge --ff-only ${CURRENT_VERSION}
+git checkout -q master
+echo "Checked out: master"
+
+git pull -q
+git merge -q --ff-only ${CURRENT_VERSION}
+echo "Merged: develop -> master"
+
 git push
+echo "Published to git: develop"
