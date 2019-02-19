@@ -1,7 +1,7 @@
 version: '3.3'
 services:
   teamcity-server:
-    image: jetbrains/teamcity-server:2018.1.1
+    image: jetbrains/teamcity-server:2018.2.2
     ports:
       - '8111:8111'
   teamcity-agent:
