@@ -13,8 +13,6 @@ project.ext {
     prodAdminPassword = '12345678'
 }
 
-def hasRunList = project.ext.properties.containsKey("runList")
-
 liquibase {
     activities {
         test {
@@ -36,7 +34,7 @@ liquibase {
         }
     }
 
-    runList = hasRunList ? project.ext.runList : 'test'
+    runList = env
 }
 
 dependencies {

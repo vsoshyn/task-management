@@ -15,7 +15,7 @@ repositories {
 
 bootRun {
     systemProperties = [
-            'spring.profiles.active': project.hasProperty('prod') ? 'prod' : 'test' 
+            'spring.profiles.active': env
     ]
 }
 

@@ -3,5 +3,6 @@ allprojects {
         mavenCentral()
     }
 
-    version = "${version}"
+    version = rootProject.version
+    rootProject.ext.env = rootProject.hasProperty('prod') ? 'prod' : 'test'
 }

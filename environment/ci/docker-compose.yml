@@ -15,7 +15,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
   youtrack:
-    image: jetbrains/youtrack:2018.2.44329
+    image: jetbrains/youtrack:2018.4.49352
     ports:
       - '8080:8080'
   postgres:

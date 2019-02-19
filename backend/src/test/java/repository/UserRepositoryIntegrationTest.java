@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = { ApplicationConfig.class })
-@ActiveProfiles("prod")
+@ActiveProfiles("test")
 @Transactional
 class UserRepositoryIntegrationTest {
     @Autowired
