@@ -3,3 +3,5 @@
 build/
 target/
 *.iml
+docker-compose.override.yml
+application-local.properties
