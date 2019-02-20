@@ -4,6 +4,8 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.6.RELEASE'
     id 'net.ltgt.apt' version '0.10'
     id 'application'
+    id 'org.liquibase.gradle' version '2.0.1'
+
 }
 
 sourceCompatibility = 11
@@ -19,6 +21,12 @@ bootRun {
     ]
 }
 
+processResources {
+    expand(project.properties)
+
+    println(project.properties)
+}
+
 //processResources {
 //    from("../migration")
 //}
@@ -28,9 +36,26 @@ bootRun {
 //    into 'dependencies'
 //}
 
+liquibase {
+    activities {
+        main {
+            changeLogFile project.changeLog
+            url 'jdbc:postgresql://docker:5432/postgres'
+            username 'vsoshyn'
+            password '12345678'
+            databaseChangeLogTableName 'changelog'
+            databaseChangeLogLockTableName 'changelog_lock'
+        }
+    }
+
+    runList = main
+}
+
 test {
     useJUnitPlatform()
-//    dependsOn ':migration:update'
+    systemProperties = [
+            'spring.profiles.active': env
+    ]
 }
 
 mainClassName = 'boot.TaskManagement'

@@ -4,5 +4,5 @@ allprojects {
     }
 
     version = rootProject.version
-    rootProject.ext.env = rootProject.hasProperty('prod') ? 'prod' : 'test'
+    rootProject.ext.env = rootProject.hasProperty('env') ? rootProject.env : 'local'
 }
