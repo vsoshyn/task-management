@@ -1,4 +1,4 @@
 rootProject.name = 'task-management'
 include 'backend'
-include 'migration'
+//include 'migration'
 

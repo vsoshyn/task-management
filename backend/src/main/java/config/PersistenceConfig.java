@@ -46,11 +46,11 @@ public class PersistenceConfig {
     }
 
     @Bean
-    public DataSource dataSourcePostgresTest() {
+    public DataSource dataSource() {
         PGSimpleDataSource dataSource = new PGSimpleDataSource();
-        dataSource.setURL(environment.getProperty("application.test.postgres.jdbc.url"));
-        dataSource.setUser(environment.getProperty("application.test.postgres.jdbc.user"));
-        dataSource.setPassword(environment.getProperty("application.test.postgres.jdbc.password"));
+        dataSource.setURL(environment.getProperty("spring.datasource.url"));
+        dataSource.setUser(environment.getProperty("spring.datasource.username"));
+        dataSource.setPassword(environment.getProperty("spring.datasource.password"));
         return dataSource;
     }
 
