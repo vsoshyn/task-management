@@ -32,27 +32,6 @@ sed -i "s/TASK_MANAGER_VERSION=.*/version=$RELEASE_VERSION/" environment/prod/.e
 git add gradle.properties environment/prod/.env
 git commit -q -m "[Release version: $RELEASE_VERSION]"
 git tag -a "[Release tag: $RELEASE_VERSION]" ${RELEASE_VERSION}
-echo "Committed release version and tag: develop"
 
-
-
-docker build -q -t task-manager:${RELEASE_VERSION} backend
-echo "Built docker image: task-manager:$RELEASE_VERSION"
-
-sed -i "s/version=.*/version=${NEXT_DEVELOP_VERSION}/" gradle.properties
-git add gradle.properties
-git commit -q -m "[Next develop version: $NEXT_DEVELOP_VERSION]"
-echo "Committed next develop version: develop"
-
-git push --tags
-echo "Published to git: develop"
-
-git checkout -q master
-echo "Checked out: master"
-
-git pull -q
-git merge -q --ff-only ${RELEASE_VERSION}
-echo "Merged: develop -> master"
-
-git push
-echo "Published to git: develop"
+##teamcity[setParameter name='env.RELEASE_VERSION' value='${RELEASE_VERSION}']
+##teamcity[setParameter name='env.NEXT_DEVELOP_VERSION' value='${NEXT_DEVELOP_VERSION}']
