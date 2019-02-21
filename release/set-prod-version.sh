@@ -25,8 +25,8 @@ NEXT_DEVELOP_VERSION="$NEXT_DEVELOP_VERSION-SNAPSHOT"
 echo "Release version: $RELEASE_VERSION"
 echo "Next develop version: $NEXT_DEVELOP_VERSION"
 
-##teamcity[setParameter name='env.RELEASE_VERSION' value='${RELEASE_VERSION}']
-##teamcity[setParameter name='env.NEXT_DEVELOP_VERSION' value='${NEXT_DEVELOP_VERSION}']
+echo "##teamcity[setParameter name='env.RELEASE_VERSION' value='${RELEASE_VERSION}']"
+echo "##teamcity[setParameter name='env.NEXT_DEVELOP_VERSION' value='${NEXT_DEVELOP_VERSION}']"
 
 sed -i "s/version=.*/version=$RELEASE_VERSION/" gradle.properties
 sed -i "s/TASK_MANAGER_VERSION=.*/version=$RELEASE_VERSION/" environment/prod/.env
