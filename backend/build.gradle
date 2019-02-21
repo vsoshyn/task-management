@@ -5,15 +5,10 @@ plugins {
     id 'net.ltgt.apt' version '0.10'
     id 'application'
     id 'org.liquibase.gradle' version '2.0.1'
-
 }
 
 sourceCompatibility = 11
 targetCompatibility = 11
-
-repositories {
-    mavenCentral()
-}
 
 bootRun {
     systemProperties = [
@@ -21,34 +16,37 @@ bootRun {
     ]
 }
 
-processResources {
-    expand(project.properties)
+def props = new Properties()
+layout
+        .files("src/main/resources/application.properties", "src/main/resources/application-${env}.properties")
+        .collect()
+        .each {
+            it.withInputStream {
+                props.load(it)
+            }
+        }
 
-    println(project.properties)
+
+props.each {
+    ext.set(it.key, it.value)
 }
 
-//processResources {
-//    from("../migration")
-//}
-//
-//task copyDependencies(type: Copy) {
-//    from configurations.compile
-//    into 'dependencies'
-//}
+//println ext['spring.liquibase.change-log']
+//println ext['spring.datasource.url']
 
 liquibase {
     activities {
         main {
-            changeLogFile project.changeLog
-            url 'jdbc:postgresql://docker:5432/postgres'
-            username 'vsoshyn'
-            password '12345678'
-            databaseChangeLogTableName 'changelog'
-            databaseChangeLogLockTableName 'changelog_lock'
+            changeLogFile project.ext['spring.liquibase.change-log']
+            url project.ext['spring.datasource.url']
+            username project.ext['spring.datasource.username']
+            password project.ext['spring.datasource.password']
+            databaseChangeLogTableName project.ext['spring.liquibase.database-change-log-table']
+            databaseChangeLogLockTableName project.ext['spring.liquibase.database-change-log-lock-table']
         }
     }
 
-    runList = main
+    runList = 'main'
 }
 
 test {
@@ -65,8 +63,6 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web:2.0.5.RELEASE'
     compile 'org.springframework.boot:spring-boot-starter-security:2.0.5.RELEASE'
 
-    compile 'org.liquibase:liquibase-core:3.6.3'
-
     compile 'org.postgresql:postgresql:42.2.2'
     compile 'javax.xml.bind:jaxb-api:2.2.11'
     compile 'org.javassist:javassist:3.23.1-GA'
@@ -80,4 +76,8 @@ dependencies {
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+
+    liquibaseRuntime 'org.liquibase:liquibase-core:3.6.3'
+    liquibaseRuntime 'org.liquibase:liquibase-groovy-dsl:2.0.1'
+    liquibaseRuntime 'org.postgresql:postgresql:42.2.2'
 }
