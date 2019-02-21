@@ -1,7 +1,5 @@
 #!/usr/bin/env sh
 
-cd ..
-
 sed -i 's/-SNAPSHOT//' gradle.properties
 
 getProperty() {
