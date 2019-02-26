@@ -32,4 +32,4 @@ sed -i "s/version=.*/version=$RELEASE_VERSION/" gradle.properties
 sed -i "s/TASK_MANAGER_VERSION=.*/TASK_MANAGER_VERSION=$RELEASE_VERSION/" environment/prod/.env
 git add gradle.properties environment/prod/.env
 git commit -q -m "[Release version: $RELEASE_VERSION]"
-git tag -a "[Release tag: $RELEASE_VERSION]" ${RELEASE_VERSION}
+git tag -a ${RELEASE_VERSION} -m "[Release tag: $RELEASE_VERSION]"
