@@ -2,6 +2,8 @@
 
 sed -i 's/-SNAPSHOT//' gradle.properties
 
+echo "Version type: $1"
+
 getProperty() {
    PROP_KEY=$1
    RELEASE_VERSION=`cat gradle.properties | grep "$PROP_KEY" | cut -d '=' -f 2`
