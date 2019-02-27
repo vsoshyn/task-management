@@ -1,19 +1,17 @@
 version: '3.3'
 services:
-  teamcity-server:
-    image: jetbrains/teamcity-server:2018.2.2
-    ports:
-      - '8111:8111'
-  teamcity-agent:
-    build:
-      context: ./teamcity-agent
+  jenkins:
+    buid:
+      context: ./jenkins
       dockerfile: ./Dockerfile
-    environment:
-      SERVER_URL: 'teamcity-server:8111'
-      DOCKER_IN_DOCKER: 'start'
-    privileged: true
+    user: root
+    ports:
+      - '8111:8080'
+      - '50000:50000'
     volumes:
+      - jenkins-data:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
+        docker run -u root --name jenkins --rm -d -p 8080:8080 -p 50000:50000 -v jenkins-data:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock jenkinsci/blueocean
   youtrack:
     image: jetbrains/youtrack:2018.4.49352
     ports:
