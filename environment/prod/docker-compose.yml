@@ -10,7 +10,7 @@ services:
     ports:
       - 5433:5432
   task-manager:
-    image: task-manager:${TASK_MANAGER_VERSION}
+    image: task-manager:${version}
     ports:
       - '8080:3002'
     depends_on:

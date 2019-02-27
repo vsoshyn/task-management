@@ -31,7 +31,7 @@ echo "##teamcity[setParameter name='env.RELEASE_VERSION' value='${RELEASE_VERSIO
 echo "##teamcity[setParameter name='env.NEXT_DEVELOP_VERSION' value='${NEXT_DEVELOP_VERSION}']"
 
 sed -i "s/version=.*/version=$RELEASE_VERSION/" gradle.properties
-sed -i "s/TASK_MANAGER_VERSION=.*/TASK_MANAGER_VERSION=$RELEASE_VERSION/" environment/prod/.env
+sed -i "s/version=.*/version=$RELEASE_VERSION/" environment/prod/.env
 git add gradle.properties environment/prod/.env
 git commit -q -m "[Release version: $RELEASE_VERSION]"
 git tag ${RELEASE_VERSION}
