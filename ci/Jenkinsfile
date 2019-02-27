@@ -1,12 +1,12 @@
 pipeline {
     agent any
 
+    tools {
+        jdk 'JDK 11'
+    }
     stages {
         stage('Build') {
             steps {
-                tools {
-                    jdk "JDK 11"
-                }
                 sh 'java -version'
                 sh 'ls'
                 sh 'sh gradlew -Dorg.gradle.daemon=true -Dorg.gradle.parallel=true clean build -Penv=uat'
