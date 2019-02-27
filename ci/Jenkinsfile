@@ -5,7 +5,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh 'ls'
-                sh 'sh gradlew clean build'
+                sh 'sh gradlew -Penv=uat clean build'
             }
         }
         stage('Test') {
