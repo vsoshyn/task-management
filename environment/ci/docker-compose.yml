@@ -1,7 +1,7 @@
 version: '3.3'
 services:
   jenkins:
-    buid:
+    build:
       context: ./jenkins
       dockerfile: ./Dockerfile
     user: root
@@ -11,7 +11,6 @@ services:
     volumes:
       - jenkins-data:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
-        docker run -u root --name jenkins --rm -d -p 8080:8080 -p 50000:50000 -v jenkins-data:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock jenkinsci/blueocean
   youtrack:
     image: jetbrains/youtrack:2018.4.49352
     ports:
@@ -36,3 +35,5 @@ services:
     image: registry:2.6
     ports:
       - '5000:5000'
+volumes:
+  jenkins-data:
