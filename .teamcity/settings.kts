@@ -43,7 +43,7 @@ object Build : BuildType({
 
     steps {
         gradle {
-            tasks = "clean build"
+            tasks = "clean distBootTar"
             buildFile = ""
         }
     }
