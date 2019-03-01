@@ -46,6 +46,9 @@ object Build : BuildType({
             tasks = "clean distBootTar"
             buildFile = ""
         }
+        script {
+            scriptContent = "java -version"
+        }
     }
 
     triggers {
